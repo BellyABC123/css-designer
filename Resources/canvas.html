@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>css3 Designer</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
+		<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
+		<script>
+			if(typeof Ti=="undefined"){Ti = window.parent.Ti;}
+			
+			Ti.App.addEventListener("app:sendCssChange", function(e) {
+	        	$('#myItem'+e.id+' .block').css(e.name,e.value);
+	      	});
+	      	
+			Ti.App.addEventListener("app:createItems", function(e) {
+				$("#items").html("");
+				$.each(e.items, function(i,l){
+					$("#items").append('<div class="block_outer" id="myItem'+i+'" onclick="selectItem('+i+');"><div>#myItem'+i+'</div><div class="block" ></div></div>');
+					for (var key in e.items[i]) {
+						$('#myItem'+i+' .block').css(key,e.items[i][key]);
+					}
+				});
+	      	});
+	      	
+	      	function selectItem(i){
+	      		$('.block_outer').css("background-color","transparent");
+	      		$('#myItem'+i).css("background-color","#ccc");
+	      		Ti.App.fireEvent('app:selectItem', { id: i });
+	      	}
+		</script>
+		<style>
+			body{padding:0;margin:0;background:#F1F1F1;}
+			.block_outer{padding:5px 10px;margin:0;}
+			.block{border:1px solid #aaa;background:#fff;padding:30px;margin:0 auto 20px;width:100px;}
+		</style>
+	</head>
+	<body>
+		<div id="items">
+		</div>
+	</body>
+</html>
